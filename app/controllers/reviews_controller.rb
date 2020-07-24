@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 class ReviewsController < ApplicationController
   before_action :require_signin
   before_action :set_movie
-  
+
   def index
     @reviews = @movie.reviews
   end
@@ -15,9 +13,10 @@ class ReviewsController < ApplicationController
   def create
     @review = @movie.reviews.new(review_params)
     @review.user = current_user
+
     if @review.save
       redirect_to movie_reviews_path(@movie),
-                  notice: 'Thanks for your review!'
+                    notice: "Thanks for your review!"
     else
       render :new
     end
@@ -30,6 +29,7 @@ private
   end
 
   def set_movie
-    @movie = Movie.find(params[:movie_id])
+    @movie = Movie.find_by!(slug: params[:movie_id])
   end
+
 end
